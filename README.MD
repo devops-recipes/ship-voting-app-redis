@@ -8,7 +8,7 @@ You need the following in order to run this sample:
 
 - A Google Cloud account at https://cloud.google.com/
   * A Project that has Google Container Engine (GKE) and Google Container Registry (GCR) enabled
-  * An [existing Kubernetes cluster](https://cloud.google.com/container-engine/docs/clusters/operations) on GKE where you will deploy this sample application
+  * An [existing Kubernetes cluster](https://cloud.google.com/container-engine/docs/clusters/operations) on GKE where you will deploy this sample application. If you want to do this programmatically using Shippable, [check out our docs on this topic]()
   * [APIs should be enabled](https://support.google.com/cloud/answer/6158841?hl=en)
 - A GitHub account where you will fork and run this sample
 - [Sign in with GitHub](https://app.shippable.com) to create a Shippable account
@@ -26,8 +26,8 @@ Fork this repository to your GitHub account.
 Since your deployment config will interact with GCR to push the front-end image and GKE to deploy the application, you will need to create integrations for these in the Shippable UI.
 
 Follow steps in **Adding an account integration** section to create these integrations:
-- [Create a GCR integration called drship_gcr](http://docs.shippable.com/platform/integration/gcr/)
-- [Create a GKE integration called drship_gke](http://docs.shippable.com/platform/integration/gke/)
+- [Create a GCR integration](http://docs.shippable.com/platform/integration/gcr/) called `drship_gcr`
+- [Create a GKE integration](http://docs.shippable.com/platform/integration/gke/) called `drship_gke`
 
 You will also need to [create a GitHub integration](http://docs.shippable.com/platform/integration/github/) to access contents of your repository. Make sure the friendly name of this integration is `dr_github`.
 
@@ -39,8 +39,6 @@ In `shippable.resources.yml`:
 - In the `ship_voting_app_redis_gitRepo` resource definition, replace `devops-recipes/ship-voting-app-redis` with the name of your forked repo
 - In the `front_img` resource definition, replace `gcr.io/fair-future-183201/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
 - In `kube_cluster`, replace the value of `sourceName` and `region` with the name of your GKE cluster name and region.
-
-**Please note that if you did not use the integration names specified in step 2, you will need to replace `dr_github`, `drship_gcr` and `drship_gke` with your integration names from `https://app.shippable.com/subs/github/[Subscription name]/integrations`**
 
 ### Step 4: Import config into shippable
 
@@ -56,7 +54,7 @@ Right click on the `build_image` job in your SPOG view and click on `Build`. Thi
 
 Here are some links that will help you understand how the sample is structured:
 
-* This sample extensively [uses the shipctl utility](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/):
+* This sample extensively uses the [shipctl utility](http://docs.shippable.com/platform/tutorial/workflow/using-shipctl/) to perform common operations like:
   * To extract information from IN resources
   * Put information in OUT resources
   * Replacing environment values in the Kubernetes spec template for each environment.
