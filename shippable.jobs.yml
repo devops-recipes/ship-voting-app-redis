@@ -45,6 +45,7 @@ jobs:
           shipctl refresh_file_to_out_path release.template teststate_location
 
           gcloud container clusters get-credentials $KUBE_CLUSTER_CLUSTERNAME --zone $KUBE_CLUSTER_REGION
-          kubectl create -f test_deploy_spec.yml
+          $response=kubectl create -f test_deploy_spec.yml
+          echo "kubectl command response is "$response
 
           popd
