@@ -44,7 +44,9 @@ jobs:
 
             export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
             export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
-            echo $VOTE_FRONT_LABEL_PARAM$VOTE_BACK_LABEL_PARAM
+            echo "VOTE_FRONT_LABEL_PARAM: "$VOTE_FRONT_LABEL_PARAM
+            echo "VOTE_BACK_LABEL_PARAM: "$VOTE_BACK_LABEL_PARAM
+
             shippable_replace ./twotierapp.yml.template
             cat ./twotierapp.yml.template
             cp ./twotierapp.yml.template ./test_deploy_spec.yml
