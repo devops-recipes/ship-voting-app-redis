@@ -43,8 +43,6 @@ jobs:
               cp ./twotierapp.yml.template ./test_deploy_spec.yml
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
-              cat ./release.template.yml
-              echo "#######################################"
               cat ./test_deploy_spec.yml
             # gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
             # # delete previous deployments and services
