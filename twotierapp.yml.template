@@ -7,7 +7,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {VOTE_BACK_LABEL}
+        app: {VOTE_BACK_LABEL_PARAM}
     spec:
       containers:
       - name: vote-back
@@ -25,7 +25,7 @@ spec:
   ports:
   - port: 6379
   selector:
-    app: {VOTE_BACK_LABEL}
+    app: {VOTE_BACK_LABEL_PARAM}
 
 ---
 apiVersion: apps/v1beta1
@@ -42,7 +42,7 @@ spec:
   template:
     metadata:
       labels:
-        app: {VOTE_FRONT_LABEL}
+        app: {VOTE_FRONT_LABEL_PARAM}
     spec:
       containers:
       - name: vote-front
@@ -68,4 +68,4 @@ spec:
   ports:
   - port: 80
   selector:
-    app: {VOTE_FRONT_LABEL}
+    app: {VOTE_FRONT_LABEL_PARAM}

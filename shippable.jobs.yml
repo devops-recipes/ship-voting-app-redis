@@ -16,3 +16,36 @@ jobs:
           gcloud docker -- push $FRONT_IMG_SOURCENAME
           shipctl put_resource_state front_img "versionName" "$FRONT_IMG_SOURCENAME:$BRANCH.$BUILD_ID"
           popd
+
+  - name: deploy_test_cluster
+    type: runSh
+    steps:
+      - IN: app_gitRepo
+      - IN: gke_cliConfig
+      - IN: front_img
+      - IN: back_img
+      - IN: kube_cluster
+      - IN: teststate
+      - OUT: relstate
+      - OUT: teststate
+      - TASK:
+        # invoke a script that provisions the GKE cluster named test-cluster
+        - script: |
+          pushd $APP_GITREPO_PATH/gitRepo
+
+          shippable_replace twotierapp.yml.template release.template.yml
+          cat release.template.yml
+          relstate_location = shipctl get_resource_state relstate
+          shipctl refresh_file_to_out_path release.template.yml relstate_location
+
+          export VOTE_FRONT_LABEL_PARAM=${VOTE_FRONT_LABEL}
+          export VOTE_BACK_LABEL_PARAM=${VOTE_BACK_LABEL}
+          shippable_replace release.template.yml test_deploy_spec.yml
+          cat test_deploy_spec.yml
+          teststate_location = shipctl get_resource_state teststate
+          shipctl refresh_file_to_out_path release.template teststate_location
+
+          gcloud container clusters get-credentials $KUBE_CLUSTER_CLUSTERNAME --zone $KUBE_CLUSTER_REGION
+          kubectl create -f test_deploy_spec.yml
+
+          popd

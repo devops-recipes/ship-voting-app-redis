@@ -42,3 +42,24 @@ resources:
 
   - name: teststate
     type: state
+
+  - name: test_cluster_params
+    type: params
+    version:
+      params:
+        VOTE_FRONT_LABEL: "VOTE_FRONT_TEST"
+        VOTE_BACK_LABEL: "VOTE_BACK_TEST"
+
+  - name: prod_cluster_params
+    type: params
+    version:
+      params:
+        VOTE_FRONT_LABEL: "VOTE_FRONT_PROD"
+        VOTE_BACK_LABEL: "VOTE_BACK_PROD"
+
+  - name: kube_cluster
+    type: cluster
+    integration: drship_gke    #replace with your Kubernetes integration name
+    pointer:
+      sourceName: "vote-cluster"
+      region: us-central1-b
