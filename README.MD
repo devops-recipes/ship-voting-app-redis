@@ -18,7 +18,7 @@ You need the following in order to run this sample:
 
 - A Google Cloud account at https://cloud.google.com/
   * A Project that has Google Container Engine (GKE) and Google Container Registry (GCR) enabled
-  * An [existing Kubernetes cluster](https://cloud.google.com/container-engine/docs/clusters/operations) on GKE where you will deploy this sample application. If you want to do this programmatically using Shippable, [check out our docs on this topic]()
+  * An [existing Kubernetes cluster](https://cloud.google.com/container-engine/docs/clusters/operations) on GKE where you will deploy this sample application. If you want to do this programmatically using Shippable, [check out our docs on this topic](http://docs.shippable.com/provision/kubernetes-with-gkecli/)
   * [APIs should be enabled](https://support.google.com/cloud/answer/6158841?hl=en)
 - A GitHub account where you will fork and run this sample
 - [Sign in with GitHub](https://app.shippable.com) to create a Shippable account
@@ -49,6 +49,9 @@ In `shippable.resources.yml`:
 - In the `ship_voting_app_redis_gitRepo` resource definition, replace `devops-recipes/ship-voting-app-redis` with the name of your forked repo
 - In the `front_img` resource definition, replace `gcr.io/fair-future-183201/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
 - In `kube_cluster`, replace the value of `sourceName` and `region` with the name of your GKE cluster name and region.
+
+In `shippable.jobs.yml`:
+- In the `build_frontend_imag` job definition, replace `gcr.io/fair-future-183201/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
 
 ### Step 4: Import config into shippable
 
