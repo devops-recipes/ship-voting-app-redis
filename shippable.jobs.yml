@@ -10,7 +10,7 @@ jobs:
       - OUT: front_img
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
-        - script: |
+        - script:|
           pushd $APP_GITREPO_PATH/gitRepo/vote
           docker build -t $FRONT_IMG_SOURCENAME:$BRANCH.$BUILD_ID
           gcloud docker -- push $FRONT_IMG_SOURCENAME
@@ -30,7 +30,7 @@ jobs:
       - OUT: teststate
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
-        - script: |
+        - script:|
           pushd $APP_GITREPO_PATH/gitRepo
 
           shippable_replace twotierapp.yml.template release.template.yml
