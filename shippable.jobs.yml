@@ -40,11 +40,13 @@ jobs:
               shipctl replace ./release.template.yml
               shipctl refresh_file_to_out_path ./release.template.yml relstate
 
+              export BE_LABEL_ENV=$BE_LABEL
+              export FE_LABEL_ENV=$FE_LABEL
               cp ./twotierapp.yml.template ./test_deploy_spec.yml
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
               cat ./release.template.yml
-              echo #######################################
+              echo "#######################################"
               cat ./test_deploy_spec.yml
             # gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
             # # delete previous deployments and services
