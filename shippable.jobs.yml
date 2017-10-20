@@ -5,7 +5,6 @@ jobs:
     type: runSh
     steps:
       - IN: ship_voting_app_redis_gitRepo
-        switch: off
       - IN: gke_cliConfig
       - OUT: front_img
       - TASK:
