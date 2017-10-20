@@ -1,0 +1,18 @@
+jobs:
+# jobs for the provision-gke-kubernetes-cluster app
+
+  - name: build_frontend_img
+    type: runSh
+    steps:
+      - IN: app_gitRepo
+        # manually trigger the cluster provisioning job and not on every commit to the repository
+        switch: off
+      - IN: gke_cliConfig
+      - IN: front_img
+      - TASK:
+        # invoke a script that provisions the GKE cluster named test-cluster
+        - script: |
+          pushd $APP_GITREPO_PATH/gitRepo
+          docker build -t $FRONT_IMG_SOURCENAME:$BRANCH.$BUILD_ID
+          gcloud docker -- push $FRONT_IMG_SOURCENAME
+          popd

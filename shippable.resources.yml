@@ -1,0 +1,44 @@
+resources:
+# resources for the provision-gke-kubernetes-cluster app
+
+  - name: front_img
+    type: image
+    integration: drship_gcr
+    pointer:
+      sourceName: "gcr.io/fair-future-183201/vote"
+    seed:
+      versionName: "master.1"
+
+  - name: back_img
+    type: image
+    integration: drship_gcr
+    pointer:
+      sourceName: "launcher.gcr.io/google/redis3"
+    seed:
+      versionName: "latest"
+
+  # GitHub repo holding scripts to be used in runsh pipeline job
+  - name: app_gitRepo
+    type: gitRepo
+    integration: dr_github # replace with your GitHub integration name
+    pointer:
+      # replace with source code location (e.g. GitHub) where you cloned this
+      # sample project.
+      sourceName: devops-recipes/twotier-kubernetes-gke
+      branch: master
+
+  # config for GKE CLI
+  - name: gke_cliConfig
+    type: cliConfig
+    integration: drship_gke
+    pointer:
+      region: us-central1-b
+
+  - name: relstate
+    type: state
+
+  - name: prodstate
+    type: state
+
+  - name: teststate
+    type: state

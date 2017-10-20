@@ -1,0 +1,8 @@
+triggers:
+# triggers for the provision-gke-kubernetes-cluster app
+
+  - name: app_trigger
+    type: trigger
+    version:
+      # update counter to trigger the workflow
+      counter: 2
