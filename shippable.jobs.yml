@@ -70,7 +70,7 @@ jobs:
             shipctl copy_resource_file_from_state relstate release.template.yml .
             cp ./release.template.yml ./prod_deploy_spec.yml
             export FE_TAG=$(eval echo "$"$(shipctl get_resource_version_key "relstate" "FE_TAG"))
-            shipctl replace ./release.template.yml
+            shipctl replace ./prod_deploy_spec.yml
             shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
 
             gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
