@@ -6,15 +6,14 @@ jobs:
     steps:
       - IN: twotier_app_gitRepo
       - IN: gke_cliConfig
-      - IN: front_img
       - OUT: front_img
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script:|
           pushd $TWOTIER_APP_GITREPO_PATH/gitRepo/vote
-          docker build -t $FRONT_IMG_SOURCENAME:$BRANCH.$BUILD_ID
-          gcloud docker -- push $FRONT_IMG_SOURCENAME
-          shipctl put_resource_state front_img "versionName" "$FRONT_IMG_SOURCENAME:$BRANCH.$BUILD_ID"
+          docker build -t gcr.io/fair-future-183201/vote:$BRANCH.$BUILD_ID
+          gcloud docker -- push gcr.io/fair-future-183201/vote
+          shipctl put_resource_state front_img "versionName" "gcr.io/fair-future-183201/vote:$BRANCH.$BUILD_ID"
           popd
 
   - name: deploy_test_cluster
