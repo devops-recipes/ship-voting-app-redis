@@ -35,7 +35,8 @@ You will also need to [create a GitHub integration](http://docs.shippable.com/pl
 Edit the following files:
 
 In `shippable.resources.yml`:
-- In the `twotier_app_gitRepo` resource definition, replace `devops-recipes/twotier-kubernetes-gke` with the name of your forked repo
+- In the `ship_voting_app_redis_gitRepo` resource definition, replace `devops-recipes/ship-voting-app-redis` with the name of your forked repo
+- In the `front_img` resource definition, replace `gcr.io/fair-future-183201/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
 - In `kube_cluster`, replace the value of `sourceName` and `region` with the name of your GKE cluster name and region.
 
 **Please note that if you did not use the integration names specified in step 2, you will need to replace `dr_github`, `drship_gcr` and `drship_gke` with your integration names from `https://app.shippable.com/subs/github/[Subscription name]/integrations`**
