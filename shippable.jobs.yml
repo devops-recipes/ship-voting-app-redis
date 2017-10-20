@@ -50,43 +50,36 @@ jobs:
               kubectl delete service $FE_LABEL 2>/dev/null || echo ""
               kubectl delete service $BE_LABEL 2>/dev/null || echo ""
 
-              #response=$(kubectl create -o json -f ./test_deploy_spec.yml)
               kubectl create -o json -f ./test_deploy_spec.yml > kube_output.json
               cat kube_output.json
-              #echo "kubectl command response is "$response
             popd
 
-  # - name: deploy_prod_cluster
-  #   type: runSh
-  #   steps:
-  #     - IN: gke_cliConfig
-  #     - IN: prod_params
-  #     - IN: kube_cluster
-  #     - IN: prodstate
-  #     - IN: relstate
-  #     - OUT: prodstate
-  #     - TASK:
-  #       # invoke a script that provisions the GKE cluster named test-cluster
-  #       - script: |
-  #           pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
-  #           shipctl copy_resource_file_from_state relstate release.template.yml .
-  #           ls -l
-  #
-  #           export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
-  #           export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
-  #
-  #           shippable_replace ./release.template.yml
-  #           cat ./release.template.yml
-  #           cp ./release.template.yml ./prod_deploy_spec.yml
-  #           shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
-  #
-  #           gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
-  #           # delete previous deployments and services
-  #           kubectl delete deployment $VOTE_FRONT_LABEL 2>/dev/null || echo ""
-  #           kubectl delete deployment $VOTE_BACK_LABEL 2>/dev/null || echo ""
-  #           kubectl delete service $VOTE_FRONT_LABEL 2>/dev/null || echo ""
-  #           kubectl delete service $VOTE_BACK_LABEL 2>/dev/null || echo ""
-  #
-  #           response=$(kubectl create -f ./prod_deploy_spec.yml)
-  #           echo "kubectl command response is "$response
-  #           popd
+  - name: deploy_prod
+    type: runSh
+    steps:
+      - IN: gke_cliConfig
+      - IN: prod_params
+      - IN: kube_cluster
+      - IN: relstate
+      - OUT: prodstate
+      - TASK:
+        # invoke a script that provisions the GKE cluster named test-cluster
+        - script: |
+            shipctl copy_resource_file_from_state relstate release.template.yml .
+
+            export FE_TAG=$(shipctl get_resource_version_key "relstate" "FE_TAG")
+            echo $FE_TAG
+            # shipctl replace ./release.template.yml
+            # cat ./release.template.yml
+            # cp ./release.template.yml ./prod_deploy_spec.yml
+            # shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
+            #
+            # gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
+            # # delete previous deployments and services
+            # kubectl delete deployment $VOTE_FRONT_LABEL 2>/dev/null || echo ""
+            # kubectl delete deployment $VOTE_BACK_LABEL 2>/dev/null || echo ""
+            # kubectl delete service $VOTE_FRONT_LABEL 2>/dev/null || echo ""
+            # kubectl delete service $VOTE_BACK_LABEL 2>/dev/null || echo ""
+            #
+            # response=$(kubectl create -f ./prod_deploy_spec.yml)
+            # echo "kubectl command response is "$response
