@@ -18,7 +18,7 @@ resources:
       versionName: "latest"
 
   # GitHub repo holding scripts to be used in runsh pipeline job
-  - name: app_gitRepo
+  - name: twotier_app_gitRepo
     type: gitRepo
     integration: dr_github # replace with your GitHub integration name
     pointer:
