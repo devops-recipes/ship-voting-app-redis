@@ -48,7 +48,7 @@ jobs:
             unset VOTE_FRONT_LABEL_PARAM
             unset VOTE_BACK_LABEL_PARAM
             echo VOTE_FRONT_LABEL
-            echo VOTE_BACK_LABEL
+            echo VOTE_BACK_LABEL  
             export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
             export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
             echo VOTE_FRONT_LABEL_PARAM
