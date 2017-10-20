@@ -33,21 +33,17 @@ jobs:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
             pushd $TWOTIER_APP_GITREPO_PATH/gitRepo && ls -l
-
             shippable_replace ./twotierapp.yml.template ./release.template.yml
             cat release.template.yml
             relstate_location = shipctl get_resource_state relstate
             shipctl refresh_file_to_out_path release.template.yml relstate_location
-
             export VOTE_FRONT_LABEL_PARAM=${VOTE_FRONT_LABEL}
             export VOTE_BACK_LABEL_PARAM=${VOTE_BACK_LABEL}
             shippable_replace release.template.yml test_deploy_spec.yml
             cat test_deploy_spec.yml
             teststate_location = shipctl get_resource_state teststate
             shipctl refresh_file_to_out_path release.template teststate_location
-
             gcloud container clusters get-credentials $KUBE_CLUSTER_CLUSTERNAME --zone $KUBE_CLUSTER_REGION
             $response=kubectl create -f test_deploy_spec.yml
             echo "kubectl command response is "$response
-
             popd
