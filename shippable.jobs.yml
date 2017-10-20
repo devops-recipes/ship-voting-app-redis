@@ -72,7 +72,7 @@ jobs:
             export FE_TAG=$(shipctl get_resource_version_key "relstate" "FE_TAG")
 
             echo $(eval echo "$"$FE_TAG)
-
+            echo $(eval echo "$"$(shipctl get_resource_version_key "relstate" "FE_TAG"))
             # shipctl replace ./release.template.yml
             # cat ./release.template.yml
             # cp ./release.template.yml ./prod_deploy_spec.yml
