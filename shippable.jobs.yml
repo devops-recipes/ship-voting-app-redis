@@ -4,25 +4,25 @@ jobs:
   - name: build_frontend_image
     type: runSh
     steps:
-      - IN: twotier_app_gitRepo
+      - IN: ship_voting_app_redis_gitRepo
         switch: off
       - IN: gke_cliConfig
       - OUT: front_img
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
-            pushd $(shipctl get_resource_state "twotier_app_gitRepo")/vote
-            export IMG_TAG=master.$BUILD_NUMBER
-            export IMG_REF=gcr.io/fair-future-183201/vote:$IMG_TAG
-            docker build -t $IMG_REF .
-            gcloud docker -- push $IMG_REF
-            shipctl put_resource_state front_img "versionName" "$IMG_TAG"
+            pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/ship-vote
+              export IMG_TAG=master.$BUILD_NUMBER
+              export IMG_REF=gcr.io/fair-future-183201/vote:$IMG_TAG
+              docker build -t $IMG_REF .
+              gcloud docker -- push $IMG_REF
+              shipctl put_resource_state front_img "versionName" "$IMG_TAG"
             popd
 
   - name: deploy_test
     type: runSh
     steps:
-      - IN: twotier_app_gitRepo
+      - IN: ship_voting_app_redis_gitRepo
         switch: off
       - IN: gke_cliConfig
       - IN: front_img
@@ -33,13 +33,13 @@ jobs:
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
-            pushd $(shipctl get_resource_state "twotier_app_gitRepo")
+            pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/kubernetes-manifests
               export FE_TAG=$(shipctl get_resource_version_name "front_img")
-              cp ./twotierapp.yml.template ./release.template.yml
+              cp ./ship_vote_all_in_one_redis.yml.template ./release.template.yml
               shipctl post_resource_state "relstate" "FE_TAG" $FE_TAG
               shipctl refresh_file_to_out_path ./release.template.yml relstate
 
-              cp ./twotierapp.yml.template ./test_deploy_spec.yml
+              cp ./ship_vote_all_in_one_redis.yml.template ./test_deploy_spec.yml
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
 
