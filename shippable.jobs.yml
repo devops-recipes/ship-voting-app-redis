@@ -37,11 +37,11 @@ jobs:
             pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
             shippable_replace ./twotierapp.yml.template
             cat ./twotierapp.yml.template
-            cp ./twotierapp.yml.template release.template.yml
-            rm release.template.yml
+            cp ./twotierapp.yml.template ./release.template.yml
 
             relstate_location=$(shipctl get_resource_state relstate)
             shipctl refresh_file_to_out_path release.template.yml relstate_location
+            rm ./release.template.yml
 
             export VOTE_FRONT_LABEL_PARAM=${VOTE_FRONT_LABEL}
             export VOTE_BACK_LABEL_PARAM=${VOTE_BACK_LABEL}
