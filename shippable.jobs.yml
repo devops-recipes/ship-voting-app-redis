@@ -12,10 +12,11 @@ jobs:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
             pushd $(shipctl get_resource_state "twotier_app_gitRepo")/vote
-            export IMG_REF=gcr.io/fair-future-183201/vote:master.$BUILD_NUMBER
+            export IMG_TAG=master.$BUILD_NUMBER
+            export IMG_REF=gcr.io/fair-future-183201/vote:$IMG_TAG
             docker build -t $IMG_REF .
             gcloud docker -- push $IMG_REF
-            shipctl put_resource_state front_img "versionName" "$IMG_REF"
+            shipctl put_resource_state front_img "versionName" "$IMG_TAG"
             popd
 
   - name: deploy_test
