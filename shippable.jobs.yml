@@ -11,9 +11,9 @@ jobs:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
             pushd $TWOTIER_APP_GITREPO_PATH/gitRepo/vote
-            docker build -t gcr.io/fair-future-183201/vote:$BRANCH.$BUILD_ID
+            docker build -t gcr.io/fair-future-183201/vote:master.$BUILD_NUMBER .
             gcloud docker -- push gcr.io/fair-future-183201/vote
-            shipctl put_resource_state front_img "versionName" "gcr.io/fair-future-183201/vote:$BRANCH.$BUILD_ID"
+            shipctl put_resource_state front_img "versionName" "gcr.io/fair-future-183201/vote:master.$BUILD_NUMBER"
             popd
 
   - name: deploy_test_cluster
