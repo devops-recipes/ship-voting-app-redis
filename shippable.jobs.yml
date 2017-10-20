@@ -37,11 +37,9 @@ jobs:
 
               export FE_TAG=$(shipctl get_resource_version_name "front_img")
               cp ./twotierapp.yml.template ./release.template.yml
-              shipctl replace ./release.template.yml
+              shipctl post_resource_state "relstate" "FE_TAG" $FE_TAG
               shipctl refresh_file_to_out_path ./release.template.yml relstate
 
-              export BE_LABEL_ENV=$BE_LABEL
-              export FE_LABEL_ENV=$FE_LABEL
               cp ./twotierapp.yml.template ./test_deploy_spec.yml
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
