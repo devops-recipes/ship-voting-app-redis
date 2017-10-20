@@ -49,7 +49,7 @@ jobs:
             cp ./twotierapp.yml.template test_deploy_spec.yml
             shipctl refresh_file_to_out_path test_deploy_spec.yml teststate
 
-            gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_CLUSTERNAME --zone $KUBE_CLUSTER_POINTER_REGION
+            gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
             $response=$(kubectl create -f test_deploy_spec.yml)
             echo "kubectl command response is "$response
             popd
