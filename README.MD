@@ -2,6 +2,16 @@
 
 This sample creates a multi-container application in a GKE Kubernetes cluster. The application interface has been built using Python / Flask. The data component is using Redis.
 
+## Shippable workflow
+
+The workflow in this sample application is multi-stage deployments into Test and Prod environments.
+
+![Shippable Assembly Lines workflow for a multi-stage deployment to Kubernetes on GKE](https://user-images.githubusercontent.com/2983749/31842893-3043b8c6-b5a5-11e7-854b-14cb112659ab.png)
+
+The challenge with this is that the configuration of the app changes in each environment. You therefore need a config file that is specific to application/service/microservice and the environment! This creates a **new DevOps matrix from hell**  which is explained in detail in [our blog](http://blog.shippable.com/the-new-devops-matrix-from-hell).
+
+With Shippable, you just need one Kubernetes template spec and you have the ability to replace environment specific values at runtime during deployment. This avoids the matrix from hell and creates an Assembly Line for your application as it moves from code to test to prod.
+
 ## Pre-requisites
 
 You need the following in order to run this sample:
@@ -58,8 +68,6 @@ Here are some links that will help you understand how the sample is structured:
   * To extract information from IN resources
   * Put information in OUT resources
   * Replacing environment values in the Kubernetes spec template for each environment.
-
-* Our blog on [the new DevOps matrix from hell](http://blog.shippable.com/the-new-devops-matrix-from-hell) explains the philosophy behind this sample. In a nutshell, you should have one Kubernetes template spec and have the ability to replace environment specific values at runtime during deployment.
 
 * Reference for jobs and resources used in this sample:
   * `build_job` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that builds and pushes the front-end image to GCR
