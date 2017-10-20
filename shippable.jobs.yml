@@ -50,7 +50,8 @@ jobs:
               kubectl delete service $FE_LABEL 2>/dev/null || echo ""
               kubectl delete service $BE_LABEL 2>/dev/null || echo ""
 
-              response=$(kubectl create -f ./test_deploy_spec.yml)
+              response=$(kubectl create -o=jsonpath-file=kube_output.json -f ./test_deploy_spec.yml)
+              cat kube_output.json
               echo "kubectl command response is "$response
             popd
 
