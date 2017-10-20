@@ -35,7 +35,10 @@ jobs:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
             pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
+            export VOTE_FRONT_LABEL_PARAM="{VOTE_FRONT_LABEL_PARAM}"
+            export VOTE_BACK_LABEL_PARAM="{VOTE_BACK_LABEL_PARAM}"
             shippable_replace ./twotierapp.yml.template
+
             cat ./twotierapp.yml.template
             cp ./twotierapp.yml.template ./release.template.yml
 
@@ -44,8 +47,6 @@ jobs:
 
             export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
             export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
-            echo "VOTE_FRONT_LABEL_PARAM: "$VOTE_FRONT_LABEL_PARAM
-            echo "VOTE_BACK_LABEL_PARAM: "$VOTE_BACK_LABEL_PARAM
 
             shippable_replace ./twotierapp.yml.template
             cat ./twotierapp.yml.template
