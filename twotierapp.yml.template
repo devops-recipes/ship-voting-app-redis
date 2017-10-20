@@ -1,16 +1,16 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: ${BE_LABEL_ENV}
+  name: ${BE_LABEL}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: ${BE_LABEL_ENV}
+        app: ${BE_LABEL}
     spec:
       containers:
-      - name: ${BE_LABEL_ENV}
+      - name: ${BE_LABEL}
         image: redis
         ports:
         - containerPort: 6379
@@ -20,18 +20,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${BE_LABEL_ENV}
+  name: ${BE_LABEL}
 spec:
   ports:
   - port: 6379
   selector:
-    app: ${BE_LABEL_ENV}
+    app: ${BE_LABEL}
 
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: ${FE_LABEL_ENV}
+  name: ${FE_LABEL}
 spec:
   replicas: 1
   strategy:
@@ -42,10 +42,10 @@ spec:
   template:
     metadata:
       labels:
-        app: ${FE_LABEL_ENV}
+        app: ${FE_LABEL}
     spec:
       containers:
-      - name: ${FE_LABEL_ENV}
+      - name: ${FE_LABEL}
         image: gcr.io/fair-future-183201/vote:${FE_TAG}
         ports:
         - containerPort: 80
@@ -56,16 +56,16 @@ spec:
             cpu: 500m
         env:
         - name: REDIS
-          value: "${BE_LABEL_ENV}"
+          value: "${BE_LABEL}"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${FE_LABEL_ENV}
+  name: ${FE_LABEL}
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: ${FE_LABEL_ENV}
+    app: ${FE_LABEL}

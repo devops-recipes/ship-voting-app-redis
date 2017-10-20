@@ -36,15 +36,13 @@ jobs:
             pushd $(shipctl get_resource_state "twotier_app_gitRepo")
 
               export FE_TAG=$(shipctl get_resource_version_name "front_img")
-              shipctl replace ./twotierapp.yml.template
-              cp ./twotierapp.yml.template ./test_deploy_spec.yml
-              shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
-
-              export BE_LABEL_ENV=$BE_LABEL
-              export FE_LABEL_ENV=$FE_LABEL
-              shipctl replace ./twotierapp.yml.template
               cp ./twotierapp.yml.template ./release.template.yml
+              shipctl replace ./release.template.yml
               shipctl refresh_file_to_out_path ./release.template.yml relstate
+
+              cp ./twotierapp.yml.template ./test_deploy_spec.yml
+              shipctl replace ./test_deploy_spec.yml
+              shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
               cat ./release.template.yml
               echo #######################################
               cat ./test_deploy_spec.yml
