@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: ${VOTE_FRONT_LABEL_PARAM}
-        image: ${FRONT_IMG_SOURCENAME}:${FRONT_IMG_VERSIONNAME}
+        image: ${FRONT_IMG_VERSIONNAME}
         ports:
         - containerPort: 80
         resources:
