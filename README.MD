@@ -12,7 +12,7 @@ You need the following in order to run this sample:
 - A GitHub account where you will fork and run this sample
 - [Sign in with GitHub](https://app.shippable.com) to create a Shippable account
 
-If you're not familiar with Shippable, it is also recommended that you read the Platform overview doc to understand the overall structure of Shippable's DevOps Assembly Lines platform.
+If you're not familiar with Shippable, it is also recommended that you read the [Platform overview docs](http://docs.shippable.com/platform/overview/) to understand the overall structure of Shippable's DevOps Assembly Lines platform.
 
 ## Instructions
 
@@ -67,3 +67,7 @@ Here are some links that will help you understand how the sample is structured:
   * `deploy_prod` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that takes the deployment spec from `relstate`, replaces the labels needed for prod deployment, and deploys both `frontend_img` and `redis` images to production.
   * `test_params` and `prod_params` are [params resources](http://docs.shippable.com/platform/workflow/resource/params/) that contain values for labels for test and prod respectively
   * `kube_cluster` is a [cluster resource](http://docs.shippable.com/platform/workflow/resource/cluster/) that points to your Kubernetes cluster on GKE
+  * `relstate` is a [state resource](http://docs.shippable.com/platform/workflow/resource/state/) that hold the immutable release spec
+  * `gke_cliConfig` is a [cliConfig resource](http://docs.shippable.com/platform/workflow/resource/cliconfig/) that points to your GKE integration so we can initialize gcloud cli on your behalf
+  * `front_img` is an [image resource](http://docs.shippable.com/platform/workflow/resource/image/) represents the Docker image of your front-end service stored in GCR
+  * `ship_voting_app_redis_gitRepo` is a [gitRepo resource](http://docs.shippable.com/platform/workflow/resource/gitrepo/) a pointer to your github repository. This is an input to any job that needs content from this repository.
