@@ -1,16 +1,16 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: ${VOTE_BACK_LABEL_PARAM}
+  name: ${VOTE_BACK_LABEL}
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: ${VOTE_BACK_LABEL_PARAM}
+        app: ${VOTE_BACK_LABEL}
     spec:
       containers:
-      - name: ${VOTE_BACK_LABEL_PARAM}
+      - name: ${VOTE_BACK_LABEL}
         image: ${BACK_IMG_SOURCENAME}:${BACK_IMG_VERSIONNAME}
         ports:
         - containerPort: 6379
@@ -20,18 +20,18 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${VOTE_BACK_LABEL_PARAM}
+  name: ${VOTE_BACK_LABEL}
 spec:
   ports:
   - port: 6379
   selector:
-    app: ${VOTE_BACK_LABEL_PARAM}
+    app: ${VOTE_BACK_LABEL}
 
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: ${VOTE_FRONT_LABEL_PARAM}
+  name: ${VOTE_FRONT_LABEL}
 spec:
   replicas: 1
   strategy:
@@ -42,10 +42,10 @@ spec:
   template:
     metadata:
       labels:
-        app: ${VOTE_FRONT_LABEL_PARAM}
+        app: ${VOTE_FRONT_LABEL}
     spec:
       containers:
-      - name: ${VOTE_FRONT_LABEL_PARAM}
+      - name: ${VOTE_FRONT_LABEL}
         image: ${FRONT_IMG_VERSIONNAME}
         ports:
         - containerPort: 80
@@ -56,16 +56,16 @@ spec:
             cpu: 500m
         env:
         - name: REDIS
-          value: "${VOTE_BACK_LABEL_PARAM}"
+          value: "${VOTE_BACK_LABEL}"
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: ${VOTE_FRONT_LABEL_PARAM}
+  name: ${VOTE_FRONT_LABEL}
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: ${VOTE_FRONT_LABEL_PARAM}
+    app: ${VOTE_FRONT_LABEL}
