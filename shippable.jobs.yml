@@ -1,7 +1,7 @@
 jobs:
 # jobs for the provision-gke-kubernetes-cluster app
 
-  - name: build_frontend_img
+  - name: build_frontend_image
     type: runSh
     steps:
       - IN: twotier_app_gitRepo
@@ -19,6 +19,7 @@ jobs:
   - name: deploy_test_cluster
     type: runSh
     steps:
+      - IN: build_frontend_image
       - IN: twotier_app_gitRepo
       - IN: gke_cliConfig
       - IN: front_img
