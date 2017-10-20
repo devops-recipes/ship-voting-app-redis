@@ -45,6 +45,8 @@ jobs:
             shipctl refresh_file_to_out_path ./release.template.yml relstate
             rm ./release.template.yml
 
+            unset VOTE_FRONT_LABEL_PARAM
+            unset VOTE_BACK_LABEL_PARAM
             export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
             export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
             echo VOTE_FRONT_LABEL_PARAM
