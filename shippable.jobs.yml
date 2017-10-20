@@ -22,6 +22,7 @@ jobs:
     steps:
       - IN: build_frontend_image
       - IN: twotier_app_gitRepo
+        switch: off
       - IN: gke_cliConfig
       - IN: front_img
       - IN: back_img
