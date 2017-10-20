@@ -9,6 +9,7 @@ You need the following in order to run this sample:
 - A Google Cloud account at https://cloud.google.com/
   * A Project that has Google Container Engine (GKE) and Google Container Registry (GCR) enabled
   * An [existing Kubernetes cluster](https://cloud.google.com/container-engine/docs/clusters/operations) on GKE where you will deploy this sample application
+  * [APIs should be enabled](https://support.google.com/cloud/answer/6158841?hl=en)
 - A GitHub account where you will fork and run this sample
 - [Sign in with GitHub](https://app.shippable.com) to create a Shippable account
 
