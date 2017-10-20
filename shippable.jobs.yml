@@ -70,7 +70,9 @@ jobs:
             shipctl copy_resource_file_from_state relstate release.template.yml .
 
             export FE_TAG=$(shipctl get_resource_version_key "relstate" "FE_TAG")
-            echo $FE_TAG
+
+            echo $(eval echo "$"$FE_TAG)
+
             # shipctl replace ./release.template.yml
             # cat ./release.template.yml
             # cp ./release.template.yml ./prod_deploy_spec.yml
