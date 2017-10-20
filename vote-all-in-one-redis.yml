@@ -1,37 +1,35 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: vote-back
+  name: azure-vote-back
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: {VOTE_BACK_LABEL}
+        app: azure-vote-back
     spec:
       containers:
-      - name: vote-back
-        image: ${BACK_IMG_SOURCENAME}:${BACK_IMG_VERSIONNAME}
+      - name: azure-vote-back
+        image: redis
         ports:
         - containerPort: 6379
           name: redis
-
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vote-back
+  name: azure-vote-back
 spec:
   ports:
   - port: 6379
   selector:
-    app: {VOTE_BACK_LABEL}
-
+    app: azure-vote-back
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: vote-front
+  name: azure-vote-front
 spec:
   replicas: 1
   strategy:
@@ -42,11 +40,11 @@ spec:
   template:
     metadata:
       labels:
-        app: {VOTE_FRONT_LABEL}
+        app: azure-vote-front
     spec:
       containers:
-      - name: vote-front
-        image: ${FRONT_IMG_SOURCENAME}:${FRONT_IMG_VERSIONNAME}
+      - name: azure-vote-front
+        image: microsoft/azure-vote-front:redis-v1
         ports:
         - containerPort: 80
         resources:
@@ -56,16 +54,15 @@ spec:
             cpu: 500m
         env:
         - name: REDIS
-          value: "vote-back"
-
+          value: "azure-vote-back"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: vote-front
+  name: azure-vote-front
 spec:
   type: LoadBalancer
   ports:
   - port: 80
   selector:
-    app: {VOTE_FRONT_LABEL}
+    app: azure-vote-front
