@@ -10,7 +10,7 @@ spec:
         app: ${VOTE_BACK_LABEL_PARAM}
     spec:
       containers:
-      - name: vote-back
+      - name: ${VOTE_BACK_LABEL_PARAM}
         image: ${BACK_IMG_SOURCENAME}:${BACK_IMG_VERSIONNAME}
         ports:
         - containerPort: 6379
@@ -45,7 +45,7 @@ spec:
         app: ${VOTE_FRONT_LABEL_PARAM}
     spec:
       containers:
-      - name: vote-front
+      - name: ${VOTE_FRONT_LABEL_PARAM}
         image: ${FRONT_IMG_SOURCENAME}:${FRONT_IMG_VERSIONNAME}
         ports:
         - containerPort: 80
@@ -56,7 +56,7 @@ spec:
             cpu: 500m
         env:
         - name: REDIS
-          value: "vote-back"
+          value: "${VOTE_BACK_LABEL_PARAM}"
 
 ---
 apiVersion: v1
