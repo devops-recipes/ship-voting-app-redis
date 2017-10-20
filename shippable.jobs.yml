@@ -43,20 +43,15 @@ jobs:
             cp ./twotierapp.yml.template ./release.template.yml
 
             shipctl refresh_file_to_out_path ./release.template.yml relstate
-            rm ./release.template.yml
 
             unset VOTE_FRONT_LABEL_PARAM
             unset VOTE_BACK_LABEL_PARAM
-            echo $VOTE_FRONT_LABEL
-            echo $VOTE_BACK_LABEL
             export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
             export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
-            echo $VOTE_FRONT_LABEL_PARAM
-            echo $VOTE_BACK_LABEL_PARAM
 
-            shippable_replace ./twotierapp.yml.template
-            cat ./twotierapp.yml.template
-            cp ./twotierapp.yml.template ./test_deploy_spec.yml
+            shippable_replace ./release.template.yml
+            cat ./release.template.yml
+            cp ./release.template.yml ./test_deploy_spec.yml
             shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
 
             gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
