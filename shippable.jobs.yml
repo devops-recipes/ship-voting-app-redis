@@ -31,7 +31,7 @@ jobs:
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
-            pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
+            pushd $TWOTIER_APP_GITREPO_PATH/gitRepo && ls -l
 
             shippable_replace twotierapp.yml.template release.template.yml
             cat release.template.yml
