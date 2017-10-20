@@ -9,14 +9,6 @@ resources:
     seed:
       versionName: "master.1"
 
-  - name: back_img
-    type: image
-    integration: drship_gcr
-    pointer:
-      sourceName: "launcher.gcr.io/google/redis3"
-    seed:
-      versionName: "latest"
-
   # GitHub repo holding scripts to be used in runsh pipeline job
   - name: twotier_app_gitRepo
     type: gitRepo
@@ -43,19 +35,19 @@ resources:
   - name: teststate
     type: state
 
-  - name: test_cluster_params
+  - name: test_params
     type: params
     version:
       params:
-        VOTE_FRONT_LABEL: "vote-front-test"
-        VOTE_BACK_LABEL: "vote-back-test"
+        FE_LABEL: "vote-front-test"
+        BE_LABEL: "vote-back-test"
 
-  - name: prod_cluster_params
+  - name: prod_params
     type: params
     version:
       params:
-        VOTE_FRONT_LABEL: "vote-front-prod"
-        VOTE_BACK_LABEL: "vote-back-prod"
+        FE_LABEL: "vote-front-prod"
+        BE_LABEL: "vote-back-prod"
 
   - name: kube_cluster
     type: cluster

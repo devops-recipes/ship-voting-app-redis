@@ -11,93 +11,84 @@ jobs:
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
-            pushd $TWOTIER_APP_GITREPO_PATH/gitRepo/vote
-            docker build -t gcr.io/fair-future-183201/vote:master.$BUILD_NUMBER .
-            gcloud docker -- push gcr.io/fair-future-183201/vote
-            shipctl put_resource_state front_img "versionName" "gcr.io/fair-future-183201/vote:master.$BUILD_NUMBER"
+            pushd $(shipctl get_resource_state "twotier_app_gitRepo")/vote
+            export IMG_REF=gcr.io/fair-future-183201/vote:master.$BUILD_NUMBER
+            docker build -t $IMG_REF .
+            gcloud docker -- push $IMG_REF
+            shipctl put_resource_state front_img "versionName" "$IMG_REF"
             popd
 
-  - name: deploy_test_cluster
+  - name: deploy_test
     type: runSh
     steps:
       - IN: twotier_app_gitRepo
         switch: off
       - IN: gke_cliConfig
       - IN: front_img
-      - IN: back_img
-      - IN: test_cluster_params
+      - IN: test_params
       - IN: kube_cluster
-      - IN: teststate
-      - IN: relstate
       - OUT: relstate
       - OUT: teststate
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
-            pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
-            export VOTE_FRONT_LABEL_PARAM="\${VOTE_FRONT_LABEL_PARAM}"
-            export VOTE_BACK_LABEL_PARAM="\${VOTE_BACK_LABEL_PARAM}"
-            shippable_replace ./twotierapp.yml.template
+            pushd $(shipctl get_resource_state "twotier_app_gitRepo")
 
-            cat ./twotierapp.yml.template
-            cp ./twotierapp.yml.template ./release.template.yml
+              export FE_TAG=$(shipctl get_resource_version_name "front_img")
+              shipctl replace ./twotierapp.yml.template
+              cp ./twotierapp.yml.template ./test_deploy_spec.yml
+              shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
 
-            shipctl refresh_file_to_out_path ./release.template.yml relstate
-
-            unset VOTE_FRONT_LABEL_PARAM
-            unset VOTE_BACK_LABEL_PARAM
-            export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
-            export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
-
-            shippable_replace ./release.template.yml
-            cat ./release.template.yml
-            cp ./release.template.yml ./test_deploy_spec.yml
-            shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
-
-            gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
-            # delete previous deployments and services
-            kubectl delete deployment $VOTE_FRONT_LABEL 2>/dev/null || echo ""
-            kubectl delete deployment $VOTE_BACK_LABEL 2>/dev/null || echo ""
-            kubectl delete service $VOTE_FRONT_LABEL 2>/dev/null || echo ""
-            kubectl delete service $VOTE_BACK_LABEL 2>/dev/null || echo ""
-
-            response=$(kubectl create -f ./test_deploy_spec.yml)
-            echo "kubectl command response is "$response
+              export BE_LABEL_ENV=$BE_LABEL
+              export FE_LABEL_ENV=$FE_LABEL
+              shipctl replace ./twotierapp.yml.template
+              cp ./twotierapp.yml.template ./release.template.yml
+              shipctl refresh_file_to_out_path ./release.template.yml relstate
+              cat ./release.template.yml
+              echo #######################################
+              cat ./test_deploy_spec.yml
+            # gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
+            # # delete previous deployments and services
+            # kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
+            # kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
+            # kubectl delete service $FE_LABEL 2>/dev/null || echo ""
+            # kubectl delete service $BE_LABEL 2>/dev/null || echo ""
+            #
+            # response=$(kubectl create -f ./test_deploy_spec.yml)
+            # echo "kubectl command response is "$response
             popd
 
-  - name: deploy_prod_cluster
-    type: runSh
-    steps:
-      - IN: twotier_app_gitRepo
-        switch: off
-      - IN: gke_cliConfig
-      - IN: prod_cluster_params
-      - IN: kube_cluster
-      - IN: prodstate
-      - IN: relstate
-      - OUT: prodstate
-      - TASK:
-        # invoke a script that provisions the GKE cluster named test-cluster
-        - script: |
-            pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
-            shipctl copy_resource_file_from_state relstate release.template.yml .
-            ls -l
-
-            export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
-            export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
-
-            shippable_replace ./release.template.yml
-            cat ./release.template.yml
-            cp ./release.template.yml ./prod_deploy_spec.yml
-            shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
-
-            gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
-            # delete previous deployments and services
-            kubectl delete deployment $VOTE_FRONT_LABEL 2>/dev/null || echo ""
-            kubectl delete deployment $VOTE_BACK_LABEL 2>/dev/null || echo ""
-            kubectl delete service $VOTE_FRONT_LABEL 2>/dev/null || echo ""
-            kubectl delete service $VOTE_BACK_LABEL 2>/dev/null || echo ""
-
-            response=$(kubectl create -f ./prod_deploy_spec.yml)
-            echo "kubectl command response is "$response
-            popd
+  # - name: deploy_prod_cluster
+  #   type: runSh
+  #   steps:
+  #     - IN: gke_cliConfig
+  #     - IN: prod_params
+  #     - IN: kube_cluster
+  #     - IN: prodstate
+  #     - IN: relstate
+  #     - OUT: prodstate
+  #     - TASK:
+  #       # invoke a script that provisions the GKE cluster named test-cluster
+  #       - script: |
+  #           pushd $TWOTIER_APP_GITREPO_PATH/gitRepo
+  #           shipctl copy_resource_file_from_state relstate release.template.yml .
+  #           ls -l
+  #
+  #           export VOTE_FRONT_LABEL_PARAM=$VOTE_FRONT_LABEL
+  #           export VOTE_BACK_LABEL_PARAM=$VOTE_BACK_LABEL
+  #
+  #           shippable_replace ./release.template.yml
+  #           cat ./release.template.yml
+  #           cp ./release.template.yml ./prod_deploy_spec.yml
+  #           shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
+  #
+  #           gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
+  #           # delete previous deployments and services
+  #           kubectl delete deployment $VOTE_FRONT_LABEL 2>/dev/null || echo ""
+  #           kubectl delete deployment $VOTE_BACK_LABEL 2>/dev/null || echo ""
+  #           kubectl delete service $VOTE_FRONT_LABEL 2>/dev/null || echo ""
+  #           kubectl delete service $VOTE_BACK_LABEL 2>/dev/null || echo ""
+  #
+  #           response=$(kubectl create -f ./prod_deploy_spec.yml)
+  #           echo "kubectl command response is "$response
+  #           popd
