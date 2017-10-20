@@ -5,8 +5,8 @@ jobs:
     type: runSh
     steps:
       - IN: twotier_app_gitRepo
-      - IN: gke_cliConfig
         switch: off
+      - IN: gke_cliConfig
       - OUT: front_img
       - TASK:
         # invoke a script that provisions the GKE cluster named test-cluster
