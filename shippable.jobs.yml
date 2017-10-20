@@ -57,6 +57,8 @@ jobs:
   - name: deploy_prod
     type: runSh
     steps:
+      - IN: deploy_test
+        switch: off
       - IN: gke_cliConfig
       - IN: prod_params
       - IN: kube_cluster
