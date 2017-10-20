@@ -47,15 +47,15 @@ resources:
     type: params
     version:
       params:
-        VOTE_FRONT_LABEL: "VOTE-FRONT-TEST"
-        VOTE_BACK_LABEL: "VOTE-BACK-TEST"
+        VOTE_FRONT_LABEL: "vote-front-test"
+        VOTE_BACK_LABEL: "vote-back-test"
 
   - name: prod_cluster_params
     type: params
     version:
       params:
-        VOTE_FRONT_LABEL: "VOTE-FRONT-PROD"
-        VOTE_BACK_LABEL: "VOTE-BACK-PROD"
+        VOTE_FRONT_LABEL: "vote-front-prod"
+        VOTE_BACK_LABEL: "vote-back-prod"
 
   - name: kube_cluster
     type: cluster

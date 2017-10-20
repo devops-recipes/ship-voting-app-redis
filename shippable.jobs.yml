@@ -56,10 +56,10 @@ jobs:
 
             gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
             # delete previous deployments and services
-            kubectl delete deployment $VOTE_FRONT_LABEL || echo ""
-            kubectl delete deployment $VOTE_BACK_LABEL || echo ""
-            kubectl delete service $VOTE_FRONT_LABEL || echo ""
-            kubectl delete service $VOTE_BACK_LABEL || echo ""
+            kubectl delete deployment $VOTE_FRONT_LABEL 2>/dev/null || echo ""
+            kubectl delete deployment $VOTE_BACK_LABEL 2>/dev/null || echo ""
+            kubectl delete service $VOTE_FRONT_LABEL 2>/dev/null || echo ""
+            kubectl delete service $VOTE_BACK_LABEL 2>/dev/null || echo ""
 
             response=$(kubectl create -f ./test_deploy_spec.yml)
             echo "kubectl command response is "$response
