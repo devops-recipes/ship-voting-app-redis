@@ -1,7 +1,7 @@
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: vote-back
+  name: ${VOTE_BACK_LABEL_PARAM}
 spec:
   replicas: 1
   template:
@@ -20,7 +20,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vote-back
+  name: ${VOTE_BACK_LABEL_PARAM}
 spec:
   ports:
   - port: 6379
@@ -31,7 +31,7 @@ spec:
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
-  name: vote-front
+  name: ${VOTE_FRONT_LABEL_PARAM}
 spec:
   replicas: 1
   strategy:
@@ -62,7 +62,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vote-front
+  name: ${VOTE_FRONT_LABEL_PARAM}
 spec:
   type: LoadBalancer
   ports:
