@@ -20,7 +20,6 @@ jobs:
   - name: deploy_test_cluster
     type: runSh
     steps:
-      - IN: build_frontend_image
       - IN: twotier_app_gitRepo
         switch: off
       - IN: gke_cliConfig
