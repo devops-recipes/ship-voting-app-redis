@@ -34,7 +34,6 @@ jobs:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
             pushd $(shipctl get_resource_state "twotier_app_gitRepo")
-
               export FE_TAG=$(shipctl get_resource_version_name "front_img")
               cp ./twotierapp.yml.template ./release.template.yml
               shipctl post_resource_state "relstate" "FE_TAG" $FE_TAG
@@ -43,16 +42,16 @@ jobs:
               cp ./twotierapp.yml.template ./test_deploy_spec.yml
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
-              cat ./test_deploy_spec.yml
-            # gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
-            # # delete previous deployments and services
-            # kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
-            # kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
-            # kubectl delete service $FE_LABEL 2>/dev/null || echo ""
-            # kubectl delete service $BE_LABEL 2>/dev/null || echo ""
-            #
-            # response=$(kubectl create -f ./test_deploy_spec.yml)
-            # echo "kubectl command response is "$response
+
+              gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
+              # delete previous deployments and services
+              kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
+              kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
+              kubectl delete service $FE_LABEL 2>/dev/null || echo ""
+              kubectl delete service $BE_LABEL 2>/dev/null || echo ""
+
+              response=$(kubectl create -f ./test_deploy_spec.yml)
+              echo "kubectl command response is "$response
             popd
 
   # - name: deploy_prod_cluster
