@@ -30,7 +30,7 @@ jobs:
       - OUT: relstate
       - OUT: teststate
       - TASK:
-        # invoke a script that provisions the GKE cluster named test-cluster
+        # Create a Kubernetes deploy spec and service for the test environment for an existing cluster and deploy them
         - script: |
             pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/kubernetes-manifests
               export FE_TAG=$(shipctl get_resource_version_name "front_img")
@@ -64,7 +64,7 @@ jobs:
       - IN: relstate
       - OUT: prodstate
       - TASK:
-        # invoke a script that provisions the GKE cluster named test-cluster
+        # Create a Kubernetes deploy spec and service for the Prod environment for an existing cluster and deploy them
         - script: |
             shipctl copy_resource_file_from_state relstate release.template.yml .
             cp ./release.template.yml ./prod_deploy_spec.yml
