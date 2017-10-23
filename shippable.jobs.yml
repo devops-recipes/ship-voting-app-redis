@@ -8,7 +8,7 @@ jobs:
       - IN: gke_cliConfig
       - OUT: front_img
       - TASK:
-        # invoke a script that provisions the GKE cluster named test-cluster
+        # build the ship-vote image and push it to GCR
         - script: |
             pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/ship-vote
               export IMG_TAG=master.$BUILD_NUMBER
