@@ -79,10 +79,16 @@ jobs:
       - TASK:
         # Create a Kubernetes deploy spec and service for the Prod environment for an existing cluster and deploy them
         - script: |
+            # Extract the image tag from the previous stage of the workflow
+            export FE_TAG=$(eval echo "$"$(shipctl get_resource_version_key "relstate" "FE_TAG"))
+
+            # Get the deployment spec template from relstate and replace the
+            # image and label placeholder values.
             shipctl copy_resource_file_from_state relstate release.template.yml .
             cp ./release.template.yml ./prod_deploy_spec.yml
-            export FE_TAG=$(eval echo "$"$(shipctl get_resource_version_key "relstate" "FE_TAG"))
             shipctl replace ./prod_deploy_spec.yml
+
+            # Copy the final deployment spec to prodstate
             shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
 
             # Init the kubeconfig file for the cluster since we are going to use kubectl
@@ -95,5 +101,6 @@ jobs:
             kubectl delete service $BE_LABEL 2>/dev/null || echo ""
 
             # Create the service and deployment object in the prod environment
+            # using the prod deployment spec
             kubectl create -o json -f ./prod_deploy_spec.yml > kube_output.json
             cat kube_output.json
