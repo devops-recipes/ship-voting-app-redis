@@ -1,7 +1,7 @@
 jobs:
 # jobs for the provision-gke-kubernetes-cluster app
 
-  - name: build_frontend_image
+  - name: build_image
     type: runSh
     steps:
       - IN: ship_voting_app_redis_gitRepo
@@ -15,6 +15,9 @@ jobs:
               export IMG_REF=gcr.io/fair-future-183201/vote:$IMG_TAG
               docker build -t $IMG_REF .
               gcloud docker -- push $IMG_REF
+
+              # Persist the image tag in the front_img resource so that the next stage
+              # of the workflow knows which tag to deploy
               shipctl put_resource_state front_img "versionName" "$IMG_TAG"
             popd
 
@@ -33,22 +36,33 @@ jobs:
         # invoke a script that provisions the GKE cluster named test-cluster
         - script: |
             pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/kubernetes-manifests
+              # Get the image tag from the front_img resource that we persisted earlier
               export FE_TAG=$(shipctl get_resource_version_name "front_img")
-              cp ./ship_vote_all_in_one_redis.yml.template ./release.template.yml
+
+              # Save the image tag in the shared state resource relstate
+              # so that we can also use it in the next stage for prod deployment.
               shipctl post_resource_state "relstate" "FE_TAG" $FE_TAG
+
+              # Save the template file in the shared state resource relstate
+              # so that we can also use it in the next stage for prod deployment.
+              cp ./ship_vote_all_in_one_redis.yml.template ./release.template.yml
               shipctl refresh_file_to_out_path ./release.template.yml relstate
 
+              # Replace the image and label placeholder values in our template
               cp ./ship_vote_all_in_one_redis.yml.template ./test_deploy_spec.yml
               shipctl replace ./test_deploy_spec.yml
               shipctl refresh_file_to_out_path ./test_deploy_spec.yml teststate
 
+              # Init the kubeconfig file for the cluster since we are going to use kubectl
               gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
-              # delete previous deployments and services
+
+              # Delete previous deployments and services
               kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
               kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
               kubectl delete service $FE_LABEL 2>/dev/null || echo ""
               kubectl delete service $BE_LABEL 2>/dev/null || echo ""
 
+              # Create the service and deployment object in the test environment
               kubectl create -o json -f ./test_deploy_spec.yml > kube_output.json
               cat kube_output.json
             popd
@@ -72,12 +86,15 @@ jobs:
             shipctl replace ./prod_deploy_spec.yml
             shipctl refresh_file_to_out_path ./prod_deploy_spec.yml prodstate
 
+            # Init the kubeconfig file for the cluster since we are going to use kubectl
             gcloud container clusters get-credentials $KUBE_CLUSTER_POINTER_SOURCENAME --zone $KUBE_CLUSTER_POINTER_REGION
-            # delete previous deployments and services
+
+            # Delete previous deployments and services
             kubectl delete deployment $FE_LABEL 2>/dev/null || echo ""
             kubectl delete deployment $BE_LABEL 2>/dev/null || echo ""
             kubectl delete service $FE_LABEL 2>/dev/null || echo ""
             kubectl delete service $BE_LABEL 2>/dev/null || echo ""
 
+            # Create the service and deployment object in the prod environment
             kubectl create -o json -f ./prod_deploy_spec.yml > kube_output.json
             cat kube_output.json
