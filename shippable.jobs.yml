@@ -11,7 +11,7 @@ jobs:
         - script: |
             pushd $(shipctl get_resource_state "ship_voting_app_redis_gitRepo")/ship-vote
               export IMG_TAG=master.$BUILD_NUMBER
-              export IMG_REF=gcr.io/fair-future-183201/vote:$IMG_TAG
+              export IMG_REF=gcr.io/devops-samples/vote:$IMG_TAG
               docker build -t $IMG_REF .
               gcloud docker -- push $IMG_REF
 
