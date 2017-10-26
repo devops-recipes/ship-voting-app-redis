@@ -5,7 +5,7 @@ resources:
     type: image
     integration: drship_gcr
     pointer:
-      sourceName: "gcr.io/fair-future-183201/vote"
+      sourceName: "gcr.io/devops-samples/vote"
     seed:
       versionName: "master.1"
 
@@ -53,5 +53,5 @@ resources:
     type: cluster
     integration: drship_gke    #replace with your Kubernetes integration name
     pointer:
-      sourceName: "vote-cluster"
-      region: us-central1-b
+      sourceName: "devops-test-cluster"
+      region: us-central1-a

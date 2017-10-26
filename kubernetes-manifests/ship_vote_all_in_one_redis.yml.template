@@ -46,7 +46,7 @@ spec:
     spec:
       containers:
       - name: ${FE_LABEL}
-        image: gcr.io/fair-future-183201/vote:${FE_TAG}
+        image: gcr.io/devops-samples/vote:${FE_TAG}
         ports:
         - containerPort: 80
         resources:
