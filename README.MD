@@ -78,6 +78,6 @@ Here are some links that will help you understand how the sample is structured:
   * `test_params` and `prod_params` are [params resources](http://docs.shippable.com/platform/workflow/resource/params/) that contain values for labels for test and prod respectively
   * `kube_cluster` is a [cluster resource](http://docs.shippable.com/platform/workflow/resource/cluster/) that points to your Kubernetes cluster on GKE
   * `relstate` is a [state resource](http://docs.shippable.com/platform/workflow/resource/state/) that hold the immutable release spec
-  * `gke_cliConfig` is a [cliConfig resource](http://docs.shippable.com/platform/workflow/resource/cliconfig/) that points to your GKE integration so we can initialize gcloud cli on your behalf
+  * `gcloud_cliConfig` is a [cliConfig resource](http://docs.shippable.com/platform/workflow/resource/cliconfig/) that points to your GKE integration so we can initialize gcloud cli on your behalf
   * `front_img` is an [image resource](http://docs.shippable.com/platform/workflow/resource/image/) represents the Docker image of your front-end service stored in GCR
   * `ship_voting_app_redis_gitRepo` is a [gitRepo resource](http://docs.shippable.com/platform/workflow/resource/gitrepo/) a pointer to your github repository. This is an input to any job that needs content from this repository.
