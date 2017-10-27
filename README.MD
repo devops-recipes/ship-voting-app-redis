@@ -36,8 +36,7 @@ Fork this repository to your GitHub account.
 Since your deployment config will interact with GCR to push the front-end image and GKE to deploy the application, you will need to create integrations for these in the Shippable UI.
 
 Follow steps in **Adding an account integration** section to create these integrations:
-- [Create a GCR integration](http://docs.shippable.com/platform/integration/gcr/) called `drship_gcr`
-- [Create a GKE integration](http://docs.shippable.com/platform/integration/gke/) called `drship_gke`
+- [Create a Google Cloud integration](http://docs.shippable.com/platform/integration/gcloudKey/) called `drship_gcloud`
 
 You will also need to [create a GitHub integration](http://docs.shippable.com/platform/integration/github/) to access contents of your repository. Make sure the friendly name of this integration is `dr_github`.
 
@@ -47,11 +46,11 @@ Edit the following files:
 
 In `shippable.resources.yml`:
 - In the `ship_voting_app_redis_gitRepo` resource definition, replace `devops-recipes/ship-voting-app-redis` with the name of your forked repo
-- In the `front_img` resource definition, replace `gcr.io/fair-future-183201/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
+- In the `front_img` resource definition, replace `gcr.io/devops-samples/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
 - In `kube_cluster`, replace the value of `sourceName` and `region` with the name of your GKE cluster name and region.
 
 In `shippable.jobs.yml`:
-- In the `build_frontend_imag` job definition, replace `gcr.io/fair-future-183201/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
+- In the `build_image` job definition, replace `gcr.io/devops-samples/vote` with `gcr.io/YOUR-GCLOUD-PROJECT-ID/vote`. To find the project ID, [follow instructions here](https://support.google.com/cloud/answer/6158840?hl=en)
 
 ### Step 4: Import config into shippable
 
@@ -73,9 +72,9 @@ Here are some links that will help you understand how the sample is structured:
   * Replacing environment values in the Kubernetes spec template for each environment.
 
 * Reference for jobs and resources used in this sample:
-  * `build_job` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that builds and pushes the front-end image to GCR
-  * `deploy_test` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that takes the deployment template `ship_vote_all_in_one_redis.yml.template`, replaces the environment values needed for test deployment, and deploys both `frontend_img` and `redis` images. It also outputs `relstate` which is an updated deployment spec with immutable image tags to test.
-  * `deploy_prod` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that takes the deployment spec from `relstate`, replaces the labels needed for prod deployment, and deploys both `frontend_img` and `redis` images to production.
+  * `build_image` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that builds and pushes the front-end image to GCR
+  * `deploy_test` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that takes the deployment template `ship_vote_all_in_one_redis.yml.template`, replaces the environment values needed for test deployment, and deploys both `front_img` and `redis` images. It also outputs `relstate` which is an updated deployment spec with immutable image tags to test.
+  * `deploy_prod` is a [runSh job](http://docs.shippable.com/platform/workflow/job/runsh/) that takes the deployment spec from `relstate`, replaces the labels needed for prod deployment, and deploys both `front_img` and `redis` images to production.
   * `test_params` and `prod_params` are [params resources](http://docs.shippable.com/platform/workflow/resource/params/) that contain values for labels for test and prod respectively
   * `kube_cluster` is a [cluster resource](http://docs.shippable.com/platform/workflow/resource/cluster/) that points to your Kubernetes cluster on GKE
   * `relstate` is a [state resource](http://docs.shippable.com/platform/workflow/resource/state/) that hold the immutable release spec
