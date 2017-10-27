@@ -1,5 +1,4 @@
 resources:
-# resources for the provision-gke-kubernetes-cluster app
 
   # GitHub repo holding scripts to be used in runsh pipeline job
   - name: ship_voting_app_redis_gitRepo
