@@ -4,7 +4,7 @@ jobs:
     type: runSh
     steps:
       - IN: ship_voting_app_redis_gitRepo
-      - IN: gke_cliConfig
+      - IN: gcloud_cliConfig
       - OUT: front_img
       - TASK:
         # build the ship-vote image and push it to GCR
@@ -25,7 +25,7 @@ jobs:
     steps:
       - IN: ship_voting_app_redis_gitRepo
         switch: off
-      - IN: gke_cliConfig
+      - IN: gcloud_cliConfig
       - IN: front_img
       - IN: test_params
       - IN: kube_cluster
@@ -71,7 +71,7 @@ jobs:
     steps:
       - IN: deploy_test
         switch: off
-      - IN: gke_cliConfig
+      - IN: gcloud_cliConfig
       - IN: prod_params
       - IN: kube_cluster
       - IN: relstate
