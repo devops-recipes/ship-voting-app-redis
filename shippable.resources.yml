@@ -1,39 +1,32 @@
 resources:
 # resources for the provision-gke-kubernetes-cluster app
 
-  - name: front_img
-    type: image
-    integration: drship_gcr
-    pointer:
-      sourceName: "gcr.io/devops-samples/vote"
-    seed:
-      versionName: "master.1"
-
   # GitHub repo holding scripts to be used in runsh pipeline job
   - name: ship_voting_app_redis_gitRepo
     type: gitRepo
-    integration: dr_github # replace with your GitHub integration name
+    # replace dr_github with your GitHub integration name
+    integration: dr_github
     pointer:
       # replace with source code location (e.g. GitHub) where you cloned this
       # sample project.
       sourceName: devops-recipes/ship-voting-app-redis
       branch: master
 
-  # config for GKE CLI
-  - name: gke_cliConfig
+  - name: gcloud_cliConfig
     type: cliConfig
-    integration: drship_gke
+    integration: drship_gcloud
     pointer:
-      region: us-central1-b
+      # replace us-central1-a with your availability zone
+      region: us-central1-a
 
-  - name: relstate
-    type: state
-
-  - name: prodstate
-    type: state
-
-  - name: teststate
-    type: state
+  - name: front_img
+    type: image
+    integration: drship_gcloud
+    pointer:
+      # replace devops-samples with your google cloud project name
+      sourceName: "gcr.io/devops-samples/vote"
+    seed:
+      versionName: "master.1"
 
   - name: test_params
     type: params
@@ -49,9 +42,20 @@ resources:
         FE_LABEL: "vote-front-prod"
         BE_LABEL: "vote-back-prod"
 
+  - name: relstate
+    type: state
+
+  - name: prodstate
+    type: state
+
+  - name: teststate
+    type: state
+
   - name: kube_cluster
     type: cluster
-    integration: drship_gke    #replace with your Kubernetes integration name
+    integration: drship_gcloud
     pointer:
+      # replace devops-test-cluster with your kubernetes cluster name
       sourceName: "devops-test-cluster"
+      # replace us-central1-a with your availability zone
       region: us-central1-a
